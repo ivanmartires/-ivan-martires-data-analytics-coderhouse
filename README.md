@@ -44,11 +44,18 @@ categorias (1) ── (N) productos (1) ── (N) ventas (N) ── (1) cliente
 
 ### Cómo ejecutar los scripts
 
-**Requisitos:** SQL Server (probado en la versión 2025 Express) y SSMS. Los scripts usan sintaxis T-SQL (`USE`, `GO`, `TOP`, `MONTH()`), por lo que no funcionan tal cual en PostgreSQL ni en MySQL.
+**Requisitos:** SQL Server (probado en la versión 2025 Express) y SSMS. Los tres scripts no usan el mismo dialecto:
+
+| Script | Dialecto |
+|---|---|
+| `ventas_tech_db.sql` | T-SQL (`USE`, `GO`, `TINYINT`): corre en SQL Server |
+| `m5_consultas_joins.sql` | JOINs estándar, con `USE` al inicio: corre en SQL Server |
+| `m4_consultas_negocio.sql` | Entregado en sintaxis PostgreSQL (`EXTRACT`, `LIMIT`); las equivalentes de SQL Server (`MONTH()`, `TOP`) están comentadas arriba de cada consulta |
 
 1. Abrí SSMS y conectate a tu instancia de SQL Server.
 2. Abrí y ejecutá completo `sql-checkpoint/ventas_tech_db.sql`. Crea la base, borra y recrea las tablas y carga los datos; se puede volver a ejecutar sin errores.
-3. Con la base ya creada, ejecutá `m4_consultas_negocio.sql` y después `m5_consultas_joins.sql`. Ambos dependen de las tablas y los datos del paso 2 y empiezan con `USE Ventas_Tech_DB`.
+3. Ejecutá `m5_consultas_joins.sql`. Depende de las tablas y los datos del paso 2 y empieza con `USE Ventas_Tech_DB`.
+4. Para `m4_consultas_negocio.sql`, seleccioná primero la base `Ventas_Tech_DB` (el script no incluye `USE`) y usá las versiones de SQL Server de las consultas 1 y 2, que están comentadas. En la consulta 4, reemplazá `EXTRACT(MONTH FROM fecha_venta)` por `MONTH(fecha_venta)`. Las versiones ejecutables están en sintaxis PostgreSQL y SQL Server las rechaza. La consulta 3 es igual en ambos motores.
 
 **Resultados esperados:**
 
